@@ -27,8 +27,8 @@ export const CreateNote = () => {
     try {
       const res = await fetch(
         isEditMode
-          ? `http://localhost:8080/note/${id}`
-          : `http://localhost:8080/note`,
+          ? `https://scriptguru-mern-project.onrender.com/note/${id}`
+          : `https://scriptguru-mern-project.onrender.com/note`,
         {
           method: isEditMode ? 'PUT' : 'POST',
           headers: { 'Content-Type': 'application/json' },

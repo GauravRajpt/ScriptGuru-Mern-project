@@ -10,7 +10,7 @@ const AllNotes = () => {
   useEffect(() => {
     const fetchNotes = async () => {
       try {
-        const res = await fetch('http://localhost:8080/note');
+        const res = await fetch('https://scriptguru-mern-project.onrender.com/note');
         const data = await res.json();
         setNotes(data);
       } catch (error) {
