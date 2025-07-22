@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import dayjs from 'dayjs'
+import socket from '../socket';
 
 const AllNotes = () => {
   const navigate = useNavigate();
@@ -10,7 +12,7 @@ const AllNotes = () => {
   useEffect(() => {
     const fetchNotes = async () => {
       try {
-        const res = await fetch('https://scriptguru-mern-project.onrender.com/note');
+        const res = await fetch(`${import.meta.env.VITE_BASE_URL}/note`);
         const data = await res.json();
         setNotes(data);
       } catch (error) {
@@ -22,6 +24,22 @@ const AllNotes = () => {
 
     fetchNotes();
   }, []);
+
+
+  useEffect(()=>{
+    socket.on('noteCreated',(data)=>{
+      console.log(data);
+      setNotes((prev)=>[data,...prev])
+      })
+
+    socket.on('updateNote',(data)=>{
+      console.log(data._id,notes._id)
+      const updatedData = notes?.filter((i)=>i._id === data?._id);
+      if(updatedData){
+        setNotes(prev=>prev?.map((i)=>i?._id === data?._id ? {...i, ...data} : i))
+      }
+    })
+  },[])
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
@@ -45,6 +63,7 @@ const AllNotes = () => {
           {notes.map((note) => (
             <div key={note._id} className="bg-white p-4 rounded shadow hover:shadow-lg transition">
               <h2 className="text-xl font-semibold mb-2">{note.title.slice(0,35)}</h2>
+              <p className='text-gray-400 mb-4 text-sm'>{note.updatedAt ? dayjs(note.updatedAt).format('MMM D YYYY') : ''}</p>
               <p className="text-gray-700 mb-4">{note.content.slice(0,200)}</p>
               <button
   onClick={() => navigate(`/edit/${note._id}`, { state: note })}

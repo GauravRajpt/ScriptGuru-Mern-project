@@ -27,8 +27,8 @@ export const CreateNote = () => {
     try {
       const res = await fetch(
         isEditMode
-          ? `https://scriptguru-mern-project.onrender.com/note/${id}`
-          : `https://scriptguru-mern-project.onrender.com/note`,
+          ? `${import.meta.env.VITE_BASE_URL}/note/${id}`
+          : `${import.meta.env.VITE_BASE_URL}/note`,
         {
           method: isEditMode ? 'PUT' : 'POST',
           headers: { 'Content-Type': 'application/json' },
